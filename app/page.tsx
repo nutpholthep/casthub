@@ -1,103 +1,108 @@
-import Image from "next/image";
+"use client";
+import { Wine, Music2, Tv2, Upload, MessageSquare } from "lucide-react";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [text, setText] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Text:", text);
+    console.log("File:", file);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-slate-900 to-slate-800">
+      <div className="w-full max-w-md p-8 rounded-2xl space-y-6 bg-slate-800/80 backdrop-blur-lg border border-slate-700/50 shadow-2xl shadow-slate-900/40">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <div className="flex flex-col items-center gap-3">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+              <Wine className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              BarCast Pro
+            </h1>
+          </div>
+          <p className="text-slate-300 text-sm">
+            ระบบจัดการจอแสดงผลสำหรับร้านเหล้าและผับยุคใหม่
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Content */}
+        <form onSubmit={handleSubmit}>
+        <div className="space-y-5">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-slate-300">
+              <MessageSquare className="w-4 h-4" />
+              <label htmlFor="text" className="text-sm font-medium">
+                ข้อความประกาศ
+              </label>
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                id="text"
+                name="text"
+                placeholder="พิมพ์ข้อความที่ต้องการแสดง..."
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-full px-4 py-3 pl-10 rounded-xl bg-slate-700/50 border border-slate-600/50 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all"
+              />
+              <span className="absolute left-3 top-3.5 text-slate-400">
+                <MessageSquare className="w-4 h-4" />
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-slate-300">
+              <Upload className="w-4 h-4" />
+              <span className="text-sm font-medium">อัปโหลดไฟล์</span>
+            </div>
+            <div className="relative">
+              <input
+                type="file"
+                id="picture"
+                name="picture"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="hidden"
+              />
+              <label
+                htmlFor="picture"
+                className="block w-full px-4 py-8 rounded-xl bg-slate-700/30 border-2 border-dashed border-slate-600/50 text-center cursor-pointer hover:bg-slate-700/50 transition-colors group"
+              >
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <div className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-indigo-500/20 transition-colors">
+                    <Upload className="w-5 h-5 text-indigo-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-slate-200">ลากไฟล์มาวางที่นี่</p>
+                    <p className="text-xs text-slate-400 mt-1">หรือคลิกเพื่อเลือกไฟล์</p>
+                    <p className="text-xs text-slate-500 mt-2">รองรับไฟล์รูปภาพ (JPG, PNG)</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:shadow-indigo-500/20 active:scale-[0.98]"
+          >
+            <Tv2 className="w-5 h-5" />
+            <span>ส่งไปยังจอแสดงผล</span>
+          </button>
+        </div>
+      </form>
+
+      {/* Footer */}
+      <p className="mt-8 text-sm text-slate-500 text-center">
+        © {new Date().getFullYear()} BarCast Pro - ระบบแสดงผลสำหรับธุรกิจร้านเหล้า
+      </p>
     </div>
+      </div>
   );
 }
