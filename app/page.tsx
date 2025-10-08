@@ -1,10 +1,26 @@
 "use client";
-import { Wine, Music2, Tv2, Upload, MessageSquare } from "lucide-react";
-import { useState } from "react";
+import { Wine, Music2, Tv2, Upload, MessageSquare, X } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+
+  // Create preview URL when file changes
+  useEffect(() => {
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      
+      // Clean up object URL to prevent memory leaks
+      return () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+    } else {
+      setPreviewUrl('');
+    }
+  }, [file]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,35 +73,63 @@ export default function Home() {
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-slate-300">
-              <Upload className="w-4 h-4" />
-              <span className="text-sm font-medium">อัปโหลดไฟล์</span>
-            </div>
-            <div className="relative">
-              <input
-                type="file"
-                id="picture"
-                name="picture"
-                accept="image/*"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="hidden"
-              />
-              <label
-                htmlFor="picture"
-                className="block w-full px-4 py-8 rounded-xl bg-slate-700/30 border-2 border-dashed border-slate-600/50 text-center cursor-pointer hover:bg-slate-700/50 transition-colors group"
-              >
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-indigo-500/20 transition-colors">
-                    <Upload className="w-5 h-5 text-indigo-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-slate-200">ลากไฟล์มาวางที่นี่</p>
-                    <p className="text-xs text-slate-400 mt-1">หรือคลิกเพื่อเลือกไฟล์</p>
-                    <p className="text-xs text-slate-500 mt-2">รองรับไฟล์รูปภาพ (JPG, PNG)</p>
-                  </div>
+            {!file ? (
+              <>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <Upload className="w-4 h-4" />
+                  <span className="text-sm font-medium">อัปโหลดไฟล์</span>
                 </div>
-              </label>
-            </div>
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="picture"
+                    name="picture"
+                    accept="image/png, image/jpeg, image/webp"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="picture"
+                    className="block w-full px-4 py-8 rounded-xl bg-slate-700/30 border-2 border-dashed border-slate-600/50 text-center cursor-pointer hover:bg-slate-700/50 transition-colors group"
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <div className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-indigo-500/20 transition-colors">
+                        <Upload className="w-5 h-5 text-indigo-400" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-200">ลากไฟล์มาวางที่นี่</p>
+                        <p className="text-xs text-slate-400 mt-1">หรือคลิกเพื่อเลือกไฟล์</p>
+                        <p className="text-xs text-slate-500 mt-2">รองรับไฟล์รูปภาพ (JPG, PNG, WebP)</p>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </>
+            ) : (
+              <div className="relative group">
+                <div className="w-full h-64 overflow-hidden rounded-xl bg-slate-800/50">
+                  {previewUrl && (
+                    <img 
+                      src={previewUrl} 
+                      alt="preview-image" 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300" 
+                    />
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setFile(null)}
+                  className="absolute -top-2 -right-2 p-1.5 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors"
+                  aria-label="Remove image"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                  <p className="text-xs text-white/80 truncate">{file.name}</p>
+                  <p className="text-xs text-white/60">{(file.size / 1024).toFixed(1)} KB</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <button
